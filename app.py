@@ -11,21 +11,21 @@ nlp = spacy.load('es_core_news_sm')
 
 # diccionario de respuestas del bot por categoria
 sample_category_answers = pickle.load(
-    open('conversations_category_answers.pkl', 'rb')
+    open('data/conversations_category_answers.pkl', 'rb')
 )
 
 # Transformador para texto a nube de palabras 
 sample_vectorizer_bow = pickle.load(
-    open('conversations_vectorizer_bow.pkl', 'rb')
+    open('data/conversations_vectorizer_bow.pkl', 'rb')
 )
 
 # Lista ordenada de las categorias de los tags a predecir
 sample_categories = pickle.load(
-    open('conversations_categories.pkl', 'rb')
+    open('data/conversations_categories.pkl', 'rb')
 )
 
 # Modelo previamente entrenado
-model = load_model('conversations_model.h5')
+model = load_model('data/conversations_model.h5')
 
 # --------- Funciones auxiliares --------------- #
 def text_pre_process(message: str):
@@ -103,12 +103,12 @@ conversations = []
 def render():
     # Indicamos que la ruta de regresar el template 
     # renderizado del archivo "otro.html"
-    return render_template("otro.html")
+    return render_template("index.html")
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'GET':
-        return render_template('otro.html')
+        return render_template('index.html')
     if request.form['question']:
         # Procesa la pregunta para obtener la prediccion
         # del modelo
@@ -120,16 +120,16 @@ def home():
 
         # Crea textos de respuesta y pregunta
         question = 'Usuario: ' + raw_question
-        answer = 'ChatBot: ' + bot_answer
+        answer = 'Amira-Bot: ' + bot_answer
 
         # Guarda los textos de conversacion en la lista
         conversations.append(question)
         conversations.append(answer)
 
         # comunica los textos de conversacion al archivo html
-        return render_template('otro.html', chat=conversations)
+        return render_template('index.html', chat=conversations)
     else:
-        return render_template('otro.html') 
+        return render_template('index.html') 
 
 if __name__ == '__main__':
     app.run()
